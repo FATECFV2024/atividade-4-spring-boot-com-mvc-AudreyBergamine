@@ -1,12 +1,15 @@
 package com.audrey.bergamine.models;
 
 import java.io.Serializable;
+
+// import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
+// import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 
 @Entity
@@ -29,14 +32,21 @@ public class Aluno implements Serializable {
 
     Boolean matriculado;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_fk_Nota", referencedColumnName = "id")
-    Nota nota;
+    
+    @OneToOne(mappedBy = "aluno", cascade = CascadeType.ALL)
+    private Nota nota;
+
+    @OneToOne(mappedBy = "aluno", cascade = CascadeType.ALL)
+    private Endereco endereco;
+
+    // @OneToOne(cascade = CascadeType.ALL)
+    // @JoinColumn(name = "id_fk_Nota", referencedColumnName = "id")
+    // Nota nota;
 
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_fk_Endereco", referencedColumnName = "id")
-    Endereco endereco;    
+    // @OneToOne(cascade = CascadeType.ALL)
+    // @JoinColumn(name = "id_fk_Endereco", referencedColumnName = "id")
+    // Endereco endereco;    
 
 
     //  CONSTRUTORES

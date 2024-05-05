@@ -2,10 +2,13 @@ package com.audrey.bergamine.models;
 
 import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 
 
@@ -34,9 +37,15 @@ public class Endereco implements Serializable {
 
     String cep;
 
+    // @JsonIgnore
+    // @OneToOne(mappedBy = "endereco", cascade = CascadeType.ALL)
+    // Aluno aluno;
+
+    // @OneToOne(cascade = CascadeType.ALL)
     @JsonIgnore
-    @OneToOne(mappedBy = "endereco")
-    Aluno aluno;
+    @OneToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH })
+    @JoinColumn(name = "id_fk_Aluno", referencedColumnName = "id")
+    private Aluno aluno;
 
 
     //  CONSTRUTORES
@@ -66,6 +75,8 @@ public class Endereco implements Serializable {
     public void setId(Integer id) {
         this.id = id;
     }
+
+    
 
     public String getRua() {
         return rua;

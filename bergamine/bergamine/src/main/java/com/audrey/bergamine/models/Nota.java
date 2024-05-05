@@ -4,10 +4,12 @@ import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 
 @Entity
@@ -27,8 +29,15 @@ public class Nota implements Serializable {
     Double banco_de_Dados;
     Double desenv_Web;
 
+    // @JsonIgnore
+    // @OneToOne(mappedBy = "nota")
+    // Aluno aluno;
+
+    
+    // @OneToOne(cascade = CascadeType.ALL)
     @JsonIgnore
-    @OneToOne(mappedBy = "nota")
+    @OneToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH })
+    @JoinColumn(name = "id_fk_Aluno", referencedColumnName = "id")
     Aluno aluno;
 
 
@@ -58,6 +67,17 @@ public class Nota implements Serializable {
     public void setId(Integer id) {
         this.id = id;
     }
+
+    public Aluno getAluno() {
+        return aluno;
+    }
+
+    public void setAluno(Aluno aluno) {
+        this.aluno = aluno;
+    }
+
+
+
 
     @JsonProperty("Lógica e Programação")
     public Double getLogica_e_Programacao() {

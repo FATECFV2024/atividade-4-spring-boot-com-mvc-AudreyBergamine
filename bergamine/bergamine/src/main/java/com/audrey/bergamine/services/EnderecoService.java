@@ -27,5 +27,27 @@ public class EnderecoService {
         return endereco.get();
     }
 
+    
+ 
+    public Endereco update(Integer id, Endereco obj) {
+        Endereco endereco = enderecoRepository.getReferenceById(id);
+        updateData(endereco, obj);
+        return enderecoRepository.save(endereco);
+    }
+ 
+ 
+    private void updateData(Endereco endereco, Endereco obj){
+        endereco.setRua(obj.getRua());
+        endereco.setCidade(obj.getCidade());
+        endereco.setEstado(obj.getEstado());
+        endereco.setNumero(obj.getNumero());
+        endereco.setCep(obj.getCep());
+     
+    }
+
+    public void delete(Integer id) {
+        enderecoRepository.deleteById(id);
+    }
+
 
 }

@@ -22,7 +22,24 @@
   }
 }
 
-
+{
+  "nome": "Talles Bergamine ",
+  "idade": 23,
+  "curso": "Análise e Desenvolvimento de Sistemas",
+  "matriculado": true,
+  "nota": {
+    "Lógica e Programação": 9.7,
+    "Banco de Dados": 10.0,
+    "Desenvolvimento Web I": 10.0
+  },
+  "endereco": {
+    "rua": "Rua Rosa",
+    "numero": 552,
+    "cidade": "Poá",
+    "estado": "SP",
+    "cep": "01234-567"
+  }
+}
 
 
 

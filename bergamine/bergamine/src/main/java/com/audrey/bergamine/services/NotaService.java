@@ -28,4 +28,25 @@ public class NotaService {
     }
 
 
+ 
+    public Nota update(Integer id, Nota obj) {
+        Nota notas = notaRepository.getReferenceById(id);
+        updateData(notas, obj);
+        return notaRepository.save(notas);
+    }
+ 
+ 
+    private void updateData(Nota notas, Nota obj){
+        notas.setBanco_de_Dados(obj.getBanco_de_Dados());
+        notas.setDesenv_Web(obj.getDesenv_Web());
+        notas.setLogica_e_Programacao(obj.getLogica_e_Programacao());
+     
+    }
+    
+    public void delete(Integer id) {
+        notaRepository.deleteById(id);
+    }
+
+
+
 }

@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-BergamineApplication<bergamine>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.audrey.bergamine.BergamineApplication",
+            "projectName": "bergamine",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
