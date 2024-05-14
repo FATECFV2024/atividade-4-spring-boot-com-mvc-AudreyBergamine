@@ -3,6 +3,7 @@ package com.audrey.bergamine.services;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.stereotype.Component;
 import com.audrey.bergamine.models.Nota;
 import com.audrey.bergamine.repositories.NotaRepository;
@@ -43,9 +44,18 @@ public class NotaService {
      
     }
     
-    public void delete(Integer id) {
-        notaRepository.deleteById(id);
+    public void delete(Integer id) throws NotFoundException {
+        Optional<Nota> nota = notaRepository.findById(id);
+        if(nota.isPresent()) {
+            Nota nota2 = nota.get();
+            nota2.setAluno(null);
+            notaRepository.deleteById(id);
+        } else {
+            throw new NotFoundException();
+        }
+
     }
+    
 
 
 

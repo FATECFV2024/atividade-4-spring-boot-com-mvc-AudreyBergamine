@@ -3,6 +3,7 @@ package com.audrey.bergamine.services;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.stereotype.Component;
 import com.audrey.bergamine.models.Endereco;
 import com.audrey.bergamine.repositories.EnderecoRepository;
@@ -45,8 +46,17 @@ public class EnderecoService {
      
     }
 
-    public void delete(Integer id) {
-        enderecoRepository.deleteById(id);
+    public void delete(Integer id) throws NotFoundException {
+        Optional<Endereco> endereco = enderecoRepository.findById(id);
+        if(endereco.isPresent()) {
+            Endereco end2 = endereco.get();
+            end2.setAluno(null);
+            // end2.setCep(null);
+            enderecoRepository.deleteById(id);
+        } else {
+            throw new NotFoundException();
+        }
+
     }
 
 
