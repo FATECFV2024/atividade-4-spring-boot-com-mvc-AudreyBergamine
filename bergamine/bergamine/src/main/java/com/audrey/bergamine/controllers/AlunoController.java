@@ -16,7 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.audrey.bergamine.models.Aluno;
+import com.audrey.bergamine.models.Endereco;
+import com.audrey.bergamine.models.Nota;
 import com.audrey.bergamine.services.AlunoService;
+import com.audrey.bergamine.services.EnderecoService;
+import com.audrey.bergamine.services.NotaService;
 
 @RestController
 @RequestMapping(value = "/aluno")
@@ -24,6 +28,14 @@ public class AlunoController {
     
     @Autowired
     AlunoService alunoService;
+
+    @Autowired
+    EnderecoService enderecoService;
+   
+    @Autowired
+    NotaService notaService;
+ 
+
 
     @GetMapping
     public ResponseEntity<List<Aluno>>  findAll(){
@@ -39,18 +51,55 @@ public class AlunoController {
     }
 
     @PostMapping
-    public ResponseEntity<String> insert(@RequestBody Aluno obj){
-        obj = alunoService.insert(obj);
+    public ResponseEntity<Aluno> insert(@RequestBody Aluno obj){
+        Aluno aluno = alunoService.insert(obj);
+ 
+ 
+        Endereco endereco = obj.getEndereco();
+        if (endereco != null){
+            endereco.setAluno(aluno);
+            enderecoService.insert(endereco);
+        }
+ 
+ 
+        Nota nota = obj.getNota();
+        if(nota != null){
+            nota.setAluno(aluno);
+            notaService.insert(nota);
+        }
+     
+ 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
-        return ResponseEntity.created(uri).body("Aluno salvo com sucesso!! "); //Código 201
+        return ResponseEntity.created(uri).body(aluno); //Código 201
     }
+
 
     @PutMapping(value = "/{id}")
     public ResponseEntity<Aluno> update(@PathVariable Integer id, @RequestBody Aluno aluno) {
-
+        //Pega o json de nota e endereco no corpo da requisição
+        Endereco endereco = aluno.getEndereco();
+        Nota nota = aluno.getNota();
+ 
+        //Atualiza somente o aluno
         aluno = alunoService.update(id, aluno);
+ 
+ 
+        //Caso o json tenha endereco, será atualizado o endereco também
+        if (endereco != null){
+            System.out.println(aluno.getEndereco().getId());
+            enderecoService.update(aluno.getEndereco().getId(), endereco);
+        }
+ 
+ 
+        //Caso o json tenha nota, será atualizado nota também
+        if(nota != null){
+            System.out.println(aluno.getNota().getId());
+            notaService.update(aluno.getNota().getId(),nota);
+        }
+     
         return ResponseEntity.ok().body(aluno);
     }
+
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<String> delete(@PathVariable Integer id) {

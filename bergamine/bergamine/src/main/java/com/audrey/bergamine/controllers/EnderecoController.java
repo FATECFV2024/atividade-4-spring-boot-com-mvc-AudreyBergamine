@@ -15,7 +15,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import com.audrey.bergamine.models.Aluno;
 import com.audrey.bergamine.models.Endereco;
+import com.audrey.bergamine.services.AlunoService;
 import com.audrey.bergamine.services.EnderecoService;
 
 @RestController
@@ -24,6 +27,9 @@ public class EnderecoController {
     
     @Autowired
     EnderecoService enderecoService;
+
+    @Autowired
+    AlunoService alunoService;
 
     @GetMapping
     public ResponseEntity<List<Endereco>>  findAll(){
@@ -38,17 +44,19 @@ public class EnderecoController {
         return ResponseEntity.ok().body(obj);
     }
 
-    @PostMapping
-    public ResponseEntity<String> insert(@RequestBody Endereco obj){
-        obj = enderecoService.insert(obj);
+    @PostMapping(value = "/{id}")
+    public ResponseEntity<Endereco> insert(@RequestBody Endereco obj, @PathVariable Integer id){
+        Aluno aluno = alunoService.findById(id);
+        Endereco endereco = obj;
+        endereco.setAluno(aluno);
+        endereco = enderecoService.insert(obj);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
-        return ResponseEntity.created(uri).body("Endereco salvo com sucesso"); //Código 201
+        return ResponseEntity.created(uri).body(endereco); //Código 201
     }
 
 
     @PutMapping(value = "/{id}")
     public ResponseEntity<Endereco> update(@PathVariable Integer id, @RequestBody Endereco endereco) {
- 
         endereco = enderecoService.update(id, endereco);
         return ResponseEntity.ok().body(endereco);
     }

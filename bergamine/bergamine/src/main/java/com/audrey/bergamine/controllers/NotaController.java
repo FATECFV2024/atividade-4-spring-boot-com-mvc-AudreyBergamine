@@ -15,7 +15,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import com.audrey.bergamine.models.Aluno;
 import com.audrey.bergamine.models.Nota;
+import com.audrey.bergamine.services.AlunoService;
 // import com.audrey.bergamine.services.AlunoService;
 import com.audrey.bergamine.services.NotaService;
 
@@ -25,6 +28,9 @@ public class NotaController {
     
     @Autowired
     NotaService notaService;
+
+    @Autowired
+    AlunoService alunoService;
 
     @GetMapping
     public ResponseEntity<List<Nota>>  findAll(){
@@ -39,11 +45,14 @@ public class NotaController {
         return ResponseEntity.ok().body(obj);
     }
 
-    @PostMapping
-    public ResponseEntity<String> insert(@RequestBody Nota obj){
-        obj = notaService.insert(obj);
+    @PostMapping(value = "/{id}")
+    public ResponseEntity<Nota> insert(@RequestBody Nota obj, @PathVariable Integer id){
+        Aluno aluno = alunoService.findById(id);
+        Nota nota = obj;
+        nota.setAluno(aluno);
+        nota = notaService.insert(obj);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
-        return ResponseEntity.created(uri).body("Nota salvo com sucesso"); //Código 201
+        return ResponseEntity.created(uri).body(nota); //Código 201
     }
 
     @PutMapping(value = "/{id}")

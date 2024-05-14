@@ -16,20 +16,10 @@ public class AlunoService {
     private AlunoRepository alunoRepository;
 
 
-    public Aluno insert(Aluno obj) {
-
-        // Se tiver o JSON de Nota e Endereço, já vai criar as entidades Aluno, Nota e Endereço simultâneamente
-        Nota notaAluno = obj.getNota();
-        notaAluno.setAluno(obj);
-        obj.setNota(notaAluno);
-
-        Endereco enderecoAluno = obj.getEndereco();
-        enderecoAluno.setAluno(obj);
-        obj.setEndereco(enderecoAluno);
-
+    public Aluno insert(Aluno obj) { 
         return alunoRepository.save(obj);
     }
-
+    
     public List<Aluno> findAll() {
         return alunoRepository.findAll();
     }
